@@ -37,8 +37,10 @@ public class EnemyController : MonoBehaviour
     {
         var currentPos = transform.position;
         var lookDirection = waypoint - currentPos;
-        var angle = Vector2.SignedAngle(Vector3.down, lookDirection);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        var angle = Vector2.SignedAngle(Vector2.down, lookDirection);
+        var targetRot = Quaternion.Euler(0f, 0f, angle);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, _rotationSpeed * Time.deltaTime);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
