@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField] private GameObject _mainBody;
     [SerializeField] private HealthBar _healthBar;
     public float FlySpeed;
     public float _rotationSpeed;
+    [HideInInspector]
     public FlyPath FlyPath;
     private int _nextPathIndex = 1;
     void Update()
@@ -23,7 +25,7 @@ public class EnemyController : MonoBehaviour
             _nextPathIndex++;
             if (_nextPathIndex >= FlyPath.Waypoints.Length)
             {
-                Destroy(transform.parent.gameObject);
+                Destroy(gameObject);
             }
         }
     }
@@ -40,7 +42,7 @@ public class EnemyController : MonoBehaviour
 
         var angle = Vector2.SignedAngle(Vector2.down, lookDirection);
         var targetRot = Quaternion.Euler(0f, 0f, angle);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, _rotationSpeed * Time.deltaTime);
+        _mainBody.transform.rotation = Quaternion.Lerp(_mainBody.transform.rotation, targetRot, _rotationSpeed * Time.deltaTime);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -55,5 +57,9 @@ public class EnemyController : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
+    public void OnDawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(0f, -2f, 0f));
+    }
 }
