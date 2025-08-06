@@ -2,14 +2,28 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float FireRate = 2f;
+    private float _lastFireTime;
+    public Transform[] GunsPosition;
     public Bullet BulletPrefab;
     void Update()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = new Vector3(mousePosition.x, mousePosition.y, 0f);
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetMouseButton(0))
         {
-            Instantiate(BulletPrefab, transform.position, transform.rotation);
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            transform.position = new Vector3(mousePosition.x, mousePosition.y, 0f);
+        }
+        if (Time.time > _lastFireTime + FireRate)
+        {
+            FireFromGuns();
+            _lastFireTime = Time.time;
+        }
+    }
+    private void FireFromGuns()
+    {
+        foreach (var guns in GunsPosition)
+        {
+            Instantiate(BulletPrefab, guns.position, guns.rotation);
         }
     }
 }
