@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : PoolObject
 {
     public float FlySpeed;
     void Update()

@@ -6,6 +6,12 @@ public class PlayerController : MonoBehaviour
     private float _lastFireTime;
     public Transform[] GunsPosition;
     public Bullet BulletPrefab;
+    private ObjectPooling<Bullet> _bulletPool;
+    void Start()
+    {
+        _bulletPool = new ObjectPooling<Bullet>();
+        _bulletPool.Initialize(20, BulletPrefab);
+    }
     void Update()
     {
         if (Input.GetMouseButton(0))
@@ -23,7 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach (var guns in GunsPosition)
         {
-            Instantiate(BulletPrefab, guns.position, guns.rotation);
+            _bulletPool.GetFromPool(guns.position, guns.rotation);
         }
     }
 }
